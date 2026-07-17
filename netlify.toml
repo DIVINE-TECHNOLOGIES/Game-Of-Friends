@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Netlify will serve /api/* from functions.
+[functions]
+  # If you later add additional functions, this keeps default behavior.
+  directory = "netlify/functions"
+
