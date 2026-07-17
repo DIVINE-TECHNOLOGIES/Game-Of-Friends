@@ -1,0 +1,6 @@
+{
+  "name": "Game of Friends",
+  "description": "A beautiful, playful, and cozy gaming website made for couples to play, laugh, and connect.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
