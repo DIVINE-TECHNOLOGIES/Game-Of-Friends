@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>a question from Ayan</title>
+<title>a question for you 🍑</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -221,6 +221,9 @@
   #yesBtn{ transition: transform 0.3s ease; }
   #noBtn{
     position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
     transition: left 0.25s ease, top 0.25s ease, transform 0.3s ease;
   }
   .tease{
@@ -248,6 +251,59 @@
   }
   @keyframes fall{
     to{ transform: translateY(120vh) rotate(360deg); }
+  }
+
+  /* ---------- venue gallery ---------- */
+  .gallery{
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    width: 100%;
+    padding: 4px 2px 10px;
+    margin-top: 4px;
+    scrollbar-width: thin;
+  }
+  .gallery img{
+    height: 110px;
+    width: auto;
+    border-radius: 16px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px var(--shadow);
+  }
+  .venue-card{
+    width: 100%;
+    background: var(--cream);
+    border-radius: 18px;
+    padding: 14px 16px;
+    text-align: left;
+    margin: 10px 0 6px;
+  }
+  .venue-card .venue-name{
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--plum);
+  }
+  .venue-card .venue-area{
+    font-size: 13px;
+    color: var(--plum-soft);
+    margin-top: 2px;
+  }
+  .link-row{
+    margin-top: 8px;
+  }
+  .link-row a{
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--rose);
+    text-decoration: none;
+  }
+  .call-note{
+    font-size: 13px;
+    color: var(--plum-soft);
+    margin-top: 10px;
+    font-style: italic;
   }
 
   /* ---------- form ---------- */
@@ -393,39 +449,40 @@
   <section class="scene" data-scene="celebrate">
     <div class="mascot">🎉</div>
     <h2 class="title">she said yes!!</h2>
-    <p class="sub">okay okay, don't leave me hanging — when are you free?</p>
+    <p class="sub">okay, i actually have a place in mind already...</p>
     <br>
-    <button class="btn btn-primary" onclick="goTo('schedule')">pick a day →</button>
+    <button class="btn btn-primary" onclick="goTo('invite')">see the plan →</button>
   </section>
 
-  <!-- SCENE 5: schedule form -->
-  <section class="scene" data-scene="schedule">
-    <div class="mascot">📅</div>
-    <h2 class="title">let's lock it in</h2>
-    <p class="sub" style="margin-bottom:18px;">no pressure — pick whatever works for you.</p>
-    <form id="scheduleForm" style="width:100%;">
-      <div class="field">
-        <label for="dateInput">date</label>
-        <input type="date" id="dateInput" required>
-      </div>
-      <div class="field">
-        <label for="timeInput">time</label>
-        <input type="time" id="timeInput" required>
-      </div>
-      <div class="field">
-        <label for="noteInput">say something back? (optional)</label>
-        <textarea id="noteInput" placeholder="type here..."></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;">send it 💌</button>
-    </form>
+  <!-- SCENE 5: the coffee shop invite -->
+  <section class="scene" data-scene="invite">
+    <div class="mascot">☕</div>
+    <h2 class="title">let's try some new coffees</h2>
+    <p class="sub">i've been wanting to check this place out — feels right to do it with you.</p>
+
+    <div class="gallery" id="venueGallery"></div>
+
+    <div class="venue-card">
+      <div class="venue-name" id="venueName">Grey</div>
+      <div class="venue-area" id="venueArea">M Block Market, Greater Kailash 1</div>
+      <div class="link-row"><a id="directionsLink" href="#" target="_blank" rel="noopener">📍 get directions</a></div>
+    </div>
+
+    <div class="field">
+      <label for="noteInput">want to say something back? (optional)</label>
+      <textarea id="noteInput" placeholder="type here..."></textarea>
+    </div>
+    <button class="btn btn-ghost" style="width:100%; margin-bottom:14px;" onclick="saveNote()">just save my note for now</button>
+
+    <a class="btn btn-primary" id="callBtn" href="tel:+919818778507" style="width:100%; display:block; text-decoration:none;" onclick="logCallTap()">📞 call me to lock it in</a>
+    <p class="call-note">i'm genuinely nervous to hear your voice for the first time 🙈</p>
   </section>
 
   <!-- SCENE 6: done -->
   <section class="scene" data-scene="done">
     <div class="mascot">💌</div>
-    <h2 class="title">it's a date</h2>
-    <p class="sub" id="doneSummary"></p>
-    <p class="sub" style="margin-top:14px;">can't wait.</p>
+    <h2 class="title" id="doneTitle">calling now?</h2>
+    <p class="sub" id="doneSummary">see you at Grey soon.</p>
   </section>
 
 </div>
@@ -461,6 +518,13 @@
     herName: "",              // e.g. "Ananya" — leave blank for a generic greeting
     askerName: "Ayan",        // shown on the dashboard
     password: "peach143",     // change this before sending the link!
+    phone: "+919818778507",   // used for the "call me" button — update the tel: link above too if you change this
+    venueName: "Grey",
+    venueArea: "M Block Market, Greater Kailash 1, New Delhi",
+    // Paste direct image URLs of the actual shop here (e.g. from its Instagram or Google listing).
+    // I couldn't confirm a listing for "Grey" in M Block GK1 while building this, so this
+    // starts empty — the gallery just won't show until you add real photos here.
+    shopPhotos: [],
     compliments: [
       "i genuinely look forward to your texts more than i'd like to admit.",
       "you're one of the easiest people i've ever talked to — conversations with you never feel forced.",
@@ -472,10 +536,52 @@
   };
   /* ================================================================= */
 
+  function renderVenue(){
+    document.getElementById('venueName').textContent = CONFIG.venueName;
+    document.getElementById('venueArea').textContent = CONFIG.venueArea;
+    const mapsQuery = encodeURIComponent(`${CONFIG.venueName}, ${CONFIG.venueArea}`);
+    document.getElementById('directionsLink').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+    const gallery = document.getElementById('venueGallery');
+    if(CONFIG.shopPhotos.length === 0){
+      gallery.style.display = 'none';
+    }else{
+      gallery.innerHTML = '';
+      CONFIG.shopPhotos.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = CONFIG.venueName;
+        img.loading = 'lazy';
+        gallery.appendChild(img);
+      });
+    }
+  }
+  renderVenue();
+
   // ---------- scene navigation ----------
   function goTo(name){
     document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
     document.querySelector(`.scene[data-scene="${name}"]`).classList.add('active');
+    if(name === 'question') initQuestion();
+  }
+
+  function initQuestion(){
+    noCount = 0;
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    yesBtn.style.transform = 'scale(1)';
+    noBtn.style.transform = 'scale(1)';
+    document.getElementById('questionMascot').textContent = '🙏';
+    document.getElementById('teaseText').textContent = '';
+    // wait a frame so the now-visible scene has real layout dimensions
+    requestAnimationFrame(() => {
+      const zone = document.getElementById('questionZone');
+      const zoneW = zone.clientWidth;
+      const zoneH = zone.clientHeight;
+      const btnW = noBtn.offsetWidth;
+      const btnH = noBtn.offsetHeight;
+      noBtn.style.left = Math.max(zoneW - btnW - 12, 8) + 'px';
+      noBtn.style.top = Math.max((zoneH - btnH) / 2, 8) + 'px';
+    });
   }
 
   document.getElementById('greeting').textContent = CONFIG.herName ? `hey, ${CONFIG.herName}` : "hey you";
@@ -484,7 +590,7 @@
   // ---------- background floaters ----------
   (function initFloaters(){
     const wrap = document.getElementById('bgFloaters');
-    const emojis = ['💗','✨','🥰','💫'];
+    const emojis = ['💗','✨','🍑','💫'];
     for(let i=0;i<12;i++){
       const el = document.createElement('span');
       el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
@@ -529,26 +635,39 @@
     "", "wait, really? 🥺", "are you sure sure?", "c'mon, look how cute yes looks now",
     "my heart can't take this 😭", "okay this is just mean now", "yes is basically begging at this point"
   ];
+  let lastDodge = 0;
   function dodgeNo(){
+    const now = Date.now();
+    if(now - lastDodge < 200) return; // avoid double-count from touch+click firing together
+    lastDodge = now;
     noCount++;
     const zone = document.getElementById('questionZone');
     const noBtn = document.getElementById('noBtn');
     const yesBtn = document.getElementById('yesBtn');
-    const zoneRect = zone.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
-    const maxLeft = Math.max(zoneRect.width - btnRect.width, 20);
-    const maxTop = Math.max(zoneRect.height - btnRect.height, 20);
-    noBtn.style.left = Math.random() * maxLeft + 'px';
-    noBtn.style.top = Math.random() * maxTop + 'px';
-    const noScale = Math.max(1 - noCount * 0.12, 0.35);
+    // offsetWidth/offsetHeight reflect the untransformed layout box,
+    // so the scale animation doesn't throw off the position math
+    const zoneW = zone.clientWidth;
+    const zoneH = zone.clientHeight;
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const maxLeft = Math.max(zoneW - btnW - 8, 8);
+    const maxTop = Math.max(zoneH - btnH - 8, 8);
+    noBtn.style.left = (8 + Math.random() * (maxLeft - 8)) + 'px';
+    noBtn.style.top = (8 + Math.random() * (maxTop - 8)) + 'px';
+    const noScale = Math.max(1 - noCount * 0.12, 0.4);
     const yesScale = Math.min(1 + noCount * 0.18, 2.4);
     noBtn.style.transform = `scale(${noScale})`;
     yesBtn.style.transform = `scale(${yesScale})`;
     document.getElementById('questionMascot').textContent = '🥺';
     document.getElementById('teaseText').textContent = teases[Math.min(noCount, teases.length - 1)];
   }
-  // also dodge on hover for desktop users
+  // desktop: dodge before the cursor can land a click
   document.getElementById('noBtn').addEventListener('mouseenter', dodgeNo);
+  // mobile: dodge the instant she touches it, so a tap always counts
+  document.getElementById('noBtn').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dodgeNo();
+  }, { passive: false });
 
   function sayYes(){
     goTo('celebrate');
@@ -573,26 +692,44 @@
     }
   }
 
-  // ---------- schedule form + storage ----------
-  document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const date = document.getElementById('dateInput').value;
-    const time = document.getElementById('timeInput').value;
+  // ---------- invite actions + storage ----------
+  async function logCallTap(){
     const note = document.getElementById('noteInput').value.trim();
     const entry = {
-      date, time, note,
+      type: 'call_tapped',
+      note,
       noCount,
-      submittedAt: new Date().toISOString()
+      timestamp: new Date().toISOString()
     };
     try{
       await window.storage.set(`response:${Date.now()}`, JSON.stringify(entry), true);
     }catch(err){
       console.error('storage error', err);
     }
-    const prettyDate = date ? new Date(date + 'T00:00:00').toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}) : '';
-    document.getElementById('doneSummary').textContent = `${prettyDate} at ${time || 'a time you\'ll tell me'} — see you then 💛`;
+    document.getElementById('doneTitle').textContent = "calling now 📞";
+    document.getElementById('doneSummary').textContent = `see you at ${CONFIG.venueName} soon.`;
     goTo('done');
-  });
+    // the tel: link keeps navigating after this — no need to block it
+  }
+
+  async function saveNote(){
+    const note = document.getElementById('noteInput').value.trim();
+    if(!note) return;
+    const entry = {
+      type: 'note',
+      note,
+      noCount,
+      timestamp: new Date().toISOString()
+    };
+    try{
+      await window.storage.set(`response:${Date.now()}`, JSON.stringify(entry), true);
+    }catch(err){
+      console.error('storage error', err);
+    }
+    document.getElementById('doneTitle').textContent = "got it 💌";
+    document.getElementById('doneSummary').textContent = `saved your note — call whenever you're ready.`;
+    goTo('done');
+  }
 
   // ---------- admin dashboard ----------
   function openAdmin(){
@@ -634,17 +771,18 @@
           if(res && res.value) entries.push(JSON.parse(res.value));
         }catch(err){ /* skip unreadable entry */ }
       }
-      entries.sort((a,b) => (b.submittedAt || '').localeCompare(a.submittedAt || ''));
+      entries.sort((a,b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
       listEl.innerHTML = '';
       entries.forEach(entry => {
         const card = document.createElement('div');
         card.className = 'response-card';
-        const prettyDate = entry.date ? new Date(entry.date + 'T00:00:00').toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric'}) : '—';
+        const when = entry.timestamp ? new Date(entry.timestamp).toLocaleString(undefined, {weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit'}) : '—';
+        const headline = entry.type === 'call_tapped' ? '📞 she tapped "call me"!' : '💌 she left a note';
         card.innerHTML = `
-          <div><b>date:</b> ${prettyDate}</div>
-          <div><b>time:</b> ${entry.time || '—'}</div>
-          ${entry.note ? `<div><b>message:</b> ${entry.note}</div>` : ''}
-          <div><b>made her click no:</b> ${entry.noCount || 0} time(s) 😂</div>
+          <div><b>${headline}</b></div>
+          <div>${when}</div>
+          ${entry.note ? `<div style="margin-top:6px;"><b>message:</b> ${entry.note}</div>` : ''}
+          <div style="margin-top:6px;"><b>made her click no:</b> ${entry.noCount || 0} time(s) 😂</div>
         `;
         listEl.appendChild(card);
       });
