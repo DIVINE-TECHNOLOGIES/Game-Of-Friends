@@ -72,6 +72,16 @@
     to{ transform: translateY(-120vh) rotate(20deg); }
   }
 
+  .page{
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   /* ---------- card ---------- */
   .card{
     position: relative;
@@ -270,20 +280,25 @@
   .field textarea{ resize: none; min-height: 64px; }
 
   /* ---------- admin ---------- */
+  .admin-footer{
+    position: relative;
+    z-index: 1;
+    margin-top: 18px;
+    text-align: center;
+  }
   .admin-link{
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    z-index: 10;
     background: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 17px;
+    border: 2px solid var(--blush);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--plum-soft);
     box-shadow: 0 6px 16px var(--shadow);
     cursor: pointer;
+    font-family: 'Nunito', sans-serif;
   }
+  .admin-link:hover{ background: var(--blush); }
   .modal-overlay{
     display: none;
     position: fixed;
@@ -340,6 +355,7 @@
 <div class="bg-floaters" id="bgFloaters"></div>
 <div id="heartShower"></div>
 
+<div class="page">
 <div class="card">
 
   <!-- SCENE 1: intro -->
@@ -414,7 +430,10 @@
 
 </div>
 
-<button class="admin-link" title="view responses" onclick="openAdmin()">🔒</button>
+<div class="admin-footer">
+  <button class="admin-link" title="view responses" onclick="openAdmin()">🔒 view responses</button>
+</div>
+</div>
 
 <div class="modal-overlay" id="adminOverlay">
   <div class="modal">
